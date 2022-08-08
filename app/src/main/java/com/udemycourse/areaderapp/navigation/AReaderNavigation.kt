@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.udemycourse.areaderapp.screens.loginsignup.LoginSignupScreen
 import com.udemycourse.areaderapp.screens.splash.SplashScreen
 
 @Composable
@@ -21,7 +22,7 @@ fun AReaderNavigation() {
         composable(
             route = AReaderScreen.LoginSignupScreen.name
         ) {
-            
+            LoginSignupScreen(navController = navController)
         }
         composable(
             route = AReaderScreen.HomeScreen.name
