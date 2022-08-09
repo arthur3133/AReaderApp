@@ -21,13 +21,16 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.udemycourse.areaderapp.components.AppName
 import com.udemycourse.areaderapp.components.EmailInputField
 import com.udemycourse.areaderapp.components.PasswordInputField
+import com.udemycourse.areaderapp.navigation.AReaderScreen
 
 @Composable
 fun LoginSignupScreen(navController: NavController) {
+    val viewModel: LoginSignupViewModel = viewModel()
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -42,15 +45,29 @@ fun LoginSignupScreen(navController: NavController) {
             AppName()
             if (showLoginForm.value) {
                 UserForm(
-                    enable = false,
                     isCreateAccount = false,
-                    onDone = { email, password -> }
+                    onDone = { email, password ->
+                        viewModel.signInWithEmailAndPassword(
+                            email = email,
+                            password = password,
+                            goToHome = {
+                                navController.navigate(AReaderScreen.HomeScreen.name)
+                            }
+                        )
+                    }
                 )
             } else {
                 UserForm(
-                    enable = true,
                     isCreateAccount = true,
-                    onDone = { email, password -> }
+                    onDone = { email, password ->
+                        viewModel.createUserWithEmailAndPassword(
+                            email = email,
+                            password = password,
+                            goToHome = {
+                                navController.navigate(AReaderScreen.HomeScreen.name)
+                            }
+                        )
+                    }
                 )
             }
             Row(
@@ -74,7 +91,6 @@ fun LoginSignupScreen(navController: NavController) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UserForm(
-    enable: Boolean = false,
     isCreateAccount: Boolean = false,
     onDone: (String, String) -> Unit
 ) {
@@ -118,6 +134,7 @@ fun UserForm(
             passwordVisibility = passwordVisibility,
             onAction = KeyboardActions {
                 if (!valid) return@KeyboardActions
+                keyboardController?.hide()
             }
         )
         SubmitButton(
@@ -141,13 +158,17 @@ fun SubmitButton(text: String, validInputs: Boolean, onClick: () -> Unit) {
         shape = CircleShape,
         enabled = validInputs
     ) {
-        if (validInputs) {
-            CircularProgressIndicator(modifier = Modifier.size(25.dp))
-        } else {
-            Text(
-                text = text,
-                modifier = Modifier.padding(5.dp)
-            )
-        }
+//        if (validInputs) {
+//            CircularProgressIndicator(modifier = Modifier.size(25.dp))
+//        } else {
+//            Text(
+//                text = text,
+//                modifier = Modifier.padding(5.dp)
+//            )
+//        }
+        Text(
+            text = text,
+            modifier = Modifier.padding(5.dp)
+        )
     }
 }
