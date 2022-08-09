@@ -51,7 +51,11 @@ fun LoginSignupScreen(navController: NavController) {
                             email = email,
                             password = password,
                             goToHome = {
-                                navController.navigate(AReaderScreen.HomeScreen.name)
+                                navController.navigate(AReaderScreen.HomeScreen.name) {
+                                    popUpTo(AReaderScreen.LoginSignupScreen.name) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         )
                     }
@@ -64,7 +68,11 @@ fun LoginSignupScreen(navController: NavController) {
                             email = email,
                             password = password,
                             goToHome = {
-                                navController.navigate(AReaderScreen.HomeScreen.name)
+                                navController.navigate(AReaderScreen.HomeScreen.name) {
+                                    popUpTo(AReaderScreen.LoginSignupScreen.name) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         )
                     }
