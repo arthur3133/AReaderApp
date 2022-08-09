@@ -18,6 +18,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.scale
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.udemycourse.areaderapp.components.AppName
 import com.udemycourse.areaderapp.navigation.AReaderScreen
 import kotlinx.coroutines.delay
@@ -40,9 +41,17 @@ fun SplashScreen(
             )
         )
         delay(2000L)
-        navController.navigate(AReaderScreen.LoginSignupScreen.name) {
-            popUpTo(AReaderScreen.SplashScreen.name) {
-                inclusive = true
+        if (FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()) {
+            navController.navigate(AReaderScreen.LoginSignupScreen.name) {
+                popUpTo(AReaderScreen.SplashScreen.name) {
+                    inclusive = true
+                }
+            }
+        } else {
+            navController.navigate(AReaderScreen.HomeScreen.name) {
+                popUpTo(AReaderScreen.SplashScreen.name) {
+                    inclusive = true
+                }
             }
         }
     }
