@@ -8,7 +8,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.udemycourse.areaderapp.data.MUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class LoginSignupViewModel: ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
