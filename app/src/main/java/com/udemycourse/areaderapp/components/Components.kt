@@ -4,23 +4,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
 fun AppName(modifier: Modifier = Modifier) {
@@ -101,5 +101,60 @@ fun PasswordInputField(
                 Icons.Default.Close
             }
         }
+    )
+}
+
+@Composable
+fun AppBar(title: String, navController: NavController) {
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h5,
+                color = Color.Red.copy(0.7f)
+            )
+        },
+        elevation = AppBarDefaults.TopAppBarElevation,
+        backgroundColor = MaterialTheme.colors.background,
+        navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back_icon")
+            }
+        }
+    )
+}
+
+@Composable
+fun SearchTextField(
+    modifier: Modifier = Modifier,
+    searchQueryState: MutableState<String>,
+    label: String,
+    maxLines: Int = 1,
+    singleLine: Boolean = false,
+    onSearchTriggered: (String) -> Unit
+) {
+    OutlinedTextField(
+        value = searchQueryState.value,
+        onValueChange = {
+            searchQueryState.value = it
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        label = {
+            Text(text = label)
+        },
+        textStyle = TextStyle(color = MaterialTheme.colors.onBackground, fontSize = 18.sp),
+        maxLines = maxLines,
+        singleLine = singleLine,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Search
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onSearchTriggered(searchQueryState.value.trim())
+            }
+        )
     )
 }

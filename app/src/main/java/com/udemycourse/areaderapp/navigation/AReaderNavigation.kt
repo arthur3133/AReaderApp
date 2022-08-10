@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.udemycourse.areaderapp.screens.home.HomeScreen
 import com.udemycourse.areaderapp.screens.loginsignup.LoginSignupScreen
+import com.udemycourse.areaderapp.screens.search.SearchScreen
 import com.udemycourse.areaderapp.screens.splash.SplashScreen
 
 @Composable
@@ -29,6 +30,11 @@ fun AReaderNavigation() {
             route = AReaderScreen.HomeScreen.name
         ) {
             HomeScreen(navController = navController)
+        }
+        composable(
+            route = AReaderScreen.SearchScreen.name
+        ) {
+            SearchScreen(navController = navController)
         }
     }
 }
