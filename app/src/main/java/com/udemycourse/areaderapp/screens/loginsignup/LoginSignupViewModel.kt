@@ -61,7 +61,7 @@ class LoginSignupViewModel: ViewModel() {
             displayName = displayName.toString(),
             profession = "Android Developer",
             avatarUrl = "",
-            quote = "Life is going good"
+            quote = "Life is going to upskilling"
         ).toMap()
         FirebaseFirestore.getInstance().collection("users").add(user)
     }
