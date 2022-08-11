@@ -1,7 +1,8 @@
 package com.udemycourse.areaderapp.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -10,7 +11,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -107,6 +110,7 @@ fun PasswordInputField(
 @Composable
 fun AppBar(
     title: String,
+    titleColor: Color = Color.Red,
     tint: Color = Color.Red,
     navController: NavController
 ) {
@@ -115,7 +119,7 @@ fun AppBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.h5,
-                color = Color.Red.copy(0.7f)
+                color = titleColor.copy(0.7f)
             )
         },
         elevation = AppBarDefaults.TopAppBarElevation,
@@ -165,4 +169,34 @@ fun SearchTextField(
             }
         )
     )
+}
+
+@Composable
+fun RoundButton(
+    label: String,
+    radius: Int,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier.clip(
+            RoundedCornerShape(
+            topStartPercent = radius,
+            bottomEndPercent = radius)
+        ),
+        color = Color(0xFF92CBDF)
+    ) {
+        Column(
+            modifier = Modifier
+                .width(100.dp)
+                .height(40.dp)
+                .clickable { onClick() },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Text(
+                text = label,
+                style = TextStyle(color = Color.White, fontSize = 15.sp)
+            )
+        }
+    }
 }

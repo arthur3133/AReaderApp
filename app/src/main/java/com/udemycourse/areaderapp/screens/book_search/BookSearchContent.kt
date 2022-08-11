@@ -27,6 +27,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.udemycourse.areaderapp.components.SearchTextField
 import com.udemycourse.areaderapp.model.Item
+import com.udemycourse.areaderapp.navigation.AReaderScreen
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -63,7 +64,9 @@ fun SearchContent(navController: NavController, bookSearchViewModel: BookSearchV
         } else {
             LazyColumn {
                 items(state.itemList) { item ->
-                    BookRow(book = item, onClicked = {})
+                    BookRow(book = item, onClicked = { bookId ->
+                        navController.navigate(AReaderScreen.BookInfoScreen.name+"/${bookId.trim()}")
+                    })
                 }
             }
         }
@@ -73,14 +76,14 @@ fun SearchContent(navController: NavController, bookSearchViewModel: BookSearchV
 @Composable
 fun BookRow(
     book: Item,
-    onClicked: (Item) -> Unit
+    onClicked: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
             .padding(vertical = 5.dp)
-            .clickable { onClicked(book) },
+            .clickable { onClicked(book.id) },
         elevation = 6.dp,
         shape = RoundedCornerShape(5.dp)
     ) {

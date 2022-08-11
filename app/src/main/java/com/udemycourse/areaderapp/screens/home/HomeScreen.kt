@@ -25,7 +25,7 @@ fun HomeScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                              navController.navigate(AReaderScreen.SearchScreen.name)
+                              navController.navigate(AReaderScreen.BookSearchScreen.name)
                     },
                     shape = CircleShape,
                     backgroundColor = Purple500

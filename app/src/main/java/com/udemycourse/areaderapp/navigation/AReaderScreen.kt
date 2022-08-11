@@ -4,5 +4,6 @@ enum class AReaderScreen {
     SplashScreen,
     LoginSignupScreen,
     HomeScreen,
-    SearchScreen
+    BookSearchScreen,
+    BookInfoScreen
 }

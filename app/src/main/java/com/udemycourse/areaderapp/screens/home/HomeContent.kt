@@ -1,7 +1,6 @@
 package com.udemycourse.areaderapp.screens.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -15,11 +14,8 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -28,6 +24,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
+import com.udemycourse.areaderapp.components.RoundButton
 import com.udemycourse.areaderapp.model.MBook
 
 @Composable
@@ -74,13 +71,13 @@ fun HomeContent(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
         SectionName(title = "Reading List")
         ReadingListArea(books = listOf<MBook>(
-            MBook(id = "1234", title = "Android", author = "Me and you", notes = ""),
-            MBook(id = "1234", title = "Kotling", author = "Me you", notes = ""),
-            MBook(id = "1234", title = "Androivkdjvd", author = "and you", notes = ""),
-            MBook(id = "1234", title = "Axvnclkndroid", author = "Me and", notes = ""),
-            MBook(id = "1234", title = "A3743947ndroid", author = "you", notes = ""),
-            MBook(id = "1234", title = "Agkkd;ndroid", author = "Me", notes = ""),
-            MBook(id = "1234", title = "An09r80droid", author = "Me you", notes = ""),
+            MBook(id = "1234", title = "Android", authors = "Me and you", notes = ""),
+            MBook(id = "1234", title = "Kotling", authors = "Me you", notes = ""),
+            MBook(id = "1234", title = "Androivkdjvd", authors = "and you", notes = ""),
+            MBook(id = "1234", title = "Axvnclkndroid", authors = "Me and", notes = ""),
+            MBook(id = "1234", title = "A3743947ndroid", authors = "you", notes = ""),
+            MBook(id = "1234", title = "Agkkd;ndroid", authors = "Me", notes = ""),
+            MBook(id = "1234", title = "An09r80droid", authors = "Me you", notes = ""),
         ), navController = navController)
     }
 }
@@ -115,7 +112,7 @@ fun ReadingListArea(books: List<MBook>, navController: NavController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BookCard(book: MBook = MBook(id = "1234", title = "Android", author = "asdf", notes = "asdfgasdfg"), navController: NavController) {
+fun BookCard(book: MBook = MBook(id = "1234", title = "Android", authors = "asdf", notes = "asdfgasdfg"), navController: NavController) {
     Card(
         modifier = Modifier
             .width(200.dp)
@@ -159,7 +156,7 @@ fun BookCard(book: MBook = MBook(id = "1234", title = "Android", author = "asdf"
            }
             Text(
                 modifier = Modifier.padding(4.dp),
-                text = book.title,
+                text = book.title.toString(),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
@@ -167,7 +164,7 @@ fun BookCard(book: MBook = MBook(id = "1234", title = "Android", author = "asdf"
             )
             Text(
                 modifier = Modifier.padding(4.dp),
-                text = book.author,
+                text = book.authors.toString(),
                 style = MaterialTheme.typography.caption
             )
             Row(modifier = Modifier.fillMaxWidth(),
@@ -201,35 +198,6 @@ fun BookRating(rating: Double) {
                 modifier = Modifier.padding(bottom = 10.dp),
                 text = rating.toString(),
                 style = MaterialTheme.typography.subtitle1
-            )
-        }
-    }
-}
-
-@Composable
-fun RoundButton(
-    label: String,
-    radius: Int,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier.clip(RoundedCornerShape(
-            topStartPercent = radius,
-            bottomEndPercent = radius
-        )),
-        color = Color(0xFF92CBDF)
-    ) {
-        Column(
-            modifier = Modifier
-                .width(100.dp)
-                .height(40.dp)
-                .clickable { onClick() },
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Text(
-                text = label,
-                style = TextStyle(color = Color.White, fontSize = 15.sp)
             )
         }
     }
