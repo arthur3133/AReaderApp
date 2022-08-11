@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.udemycourse.areaderapp">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".AReaderApplication"
         android:allowBackup="true"

@@ -1,4 +1,4 @@
-package com.udemycourse.areaderapp.data
+package com.udemycourse.areaderapp.model
 
 data class MBook(
     val id: String,

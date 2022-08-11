@@ -1,4 +1,4 @@
-package com.udemycourse.areaderapp.data
+package com.udemycourse.areaderapp.model
 
 class MUser(
     val userId: String,

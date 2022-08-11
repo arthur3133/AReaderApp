@@ -1,37 +1,36 @@
-package com.udemycourse.areaderapp.screens.search
+package com.udemycourse.areaderapp.screens.book_search
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.udemycourse.areaderapp.components.SearchTextField
-import com.udemycourse.areaderapp.data.MBook
+import com.udemycourse.areaderapp.model.Item
 
 @OptIn(ExperimentalComposeUiApi::class)
-@Preview
 @Composable
-fun SearchContent(navController: NavController = rememberNavController()) {
+fun SearchContent(navController: NavController, bookSearchViewModel: BookSearchViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,32 +51,43 @@ fun SearchContent(navController: NavController = rememberNavController()) {
             onSearchTriggered = {
                 if (valid) {
                     keyboardController?.hide()
+                    bookSearchViewModel.getAllBooks(searchQueryState.value.trim())
+                    searchQueryState.value = ""
                 }
             }
         )
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+        val state by bookSearchViewModel.state.collectAsState()
+        if (state.loading) {
+            CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
+        } else {
+            LazyColumn {
+                items(state.itemList) { item ->
+                    BookRow(book = item, onClicked = {})
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun BookRow(
-    navController: NavController
+    book: Item,
+    onClicked: (Item) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .padding(horizontal = 10.dp, vertical = 8.dp),
+            .padding(vertical = 5.dp)
+            .clickable { onClicked(book) },
         elevation = 6.dp,
-        shape = RectangleShape,
-        backgroundColor = MaterialTheme.colors.background
+        shape = RoundedCornerShape(5.dp)
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
             modifier = Modifier.fillMaxWidth()
         ) {
-            val imageUrl = "http://books.google.com/books/content?id=JGH0DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            val imageUrl = book.volumeInfo.imageLinks.thumbnail.trim()
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(imageUrl)
@@ -85,31 +95,36 @@ fun BookRow(
                     .build(),
                 contentDescription = "book_image",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.padding(end = 4.dp)
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(100.dp)
+                    .padding(end = 8.dp)
             )
             Column(
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier.padding(top = 3.dp)
             ) {
                 Text(
-                    text = "Android Title",
-                    style = MaterialTheme.typography.subtitle1,
+                    text = book.volumeInfo.title,
+                    style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.onBackground
+                    color = MaterialTheme.colors.onBackground,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Author: ",
+                    text = "Authors: ${book.volumeInfo.authors}",
                     style = MaterialTheme.typography.caption,
                     fontStyle = FontStyle.Italic,
                     color = MaterialTheme.colors.onBackground
                 )
                 Text(
-                    text = "Date: ",
+                    text = "Date: ${book.volumeInfo.publishedDate}",
                     style = MaterialTheme.typography.caption,
                     fontStyle = FontStyle.Italic,
                     color = MaterialTheme.colors.onBackground
                 )
                 Text(
-                    text = "Categories",
+                    text = "${book.volumeInfo.categories}",
                     style = MaterialTheme.typography.caption,
                     fontStyle = FontStyle.Italic,
                     color = MaterialTheme.colors.onBackground

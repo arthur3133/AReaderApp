@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.udemycourse.areaderapp.data.MUser
+import com.udemycourse.areaderapp.model.MUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

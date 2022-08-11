@@ -105,7 +105,11 @@ fun PasswordInputField(
 }
 
 @Composable
-fun AppBar(title: String, navController: NavController) {
+fun AppBar(
+    title: String,
+    tint: Color = Color.Red,
+    navController: NavController
+) {
     TopAppBar(
         title = {
             Text(
@@ -118,7 +122,11 @@ fun AppBar(title: String, navController: NavController) {
         backgroundColor = MaterialTheme.colors.background,
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back_icon")
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "back_icon",
+                    tint = tint.copy(alpha = 0.7f)
+                )
             }
         }
     )

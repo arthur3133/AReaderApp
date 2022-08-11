@@ -1,4 +1,4 @@
-package com.udemycourse.areaderapp.screens.search
+package com.udemycourse.areaderapp.screens.book_search
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable

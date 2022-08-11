@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import com.udemycourse.areaderapp.navigation.AReaderScreen
 import com.udemycourse.areaderapp.ui.theme.Purple500
 
 @Composable
@@ -23,7 +24,9 @@ fun HomeScreen(
             topBar = { HomeTopAppBar(navController = navController) },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = {  },
+                    onClick = {
+                              navController.navigate(AReaderScreen.SearchScreen.name)
+                    },
                     shape = CircleShape,
                     backgroundColor = Purple500
                 ) {
