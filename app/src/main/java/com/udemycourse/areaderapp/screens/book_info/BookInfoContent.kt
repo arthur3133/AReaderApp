@@ -1,6 +1,5 @@
 package com.udemycourse.areaderapp.screens.book_info
 
-import android.text.Html
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -30,6 +29,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.udemycourse.areaderapp.components.ImageCard
 import com.udemycourse.areaderapp.components.RoundButton
 import com.udemycourse.areaderapp.model.MBook
 import com.udemycourse.areaderapp.model.VolumeInfo
@@ -169,32 +169,4 @@ fun saveBookInfoToFirestore(mBook: MBook, navController: NavController) {
                 }
 
         }
-}
-
-@Composable
-fun ImageCard(
-    modifier: Modifier = Modifier,
-    size: Dp = 150.dp,
-    backgroundColor: Color = MaterialTheme.colors.background,
-    elevation: Dp = 4.dp,
-    shape: Shape = CircleShape,
-    imageUrl: String,
-) {
-    Card(
-        modifier = modifier
-            .size(size)
-            .padding(6.dp),
-        shape = shape,
-        elevation = elevation,
-        backgroundColor = backgroundColor
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
-                .crossfade(true)
-                .build(), 
-            contentDescription = "book_image",
-            contentScale = ContentScale.Crop
-        )
-    }
 }

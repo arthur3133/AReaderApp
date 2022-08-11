@@ -2,6 +2,7 @@ package com.udemycourse.areaderapp.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,15 +16,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 @Composable
 fun AppName(modifier: Modifier = Modifier) {
@@ -198,5 +205,33 @@ fun RoundButton(
                 style = TextStyle(color = Color.White, fontSize = 15.sp)
             )
         }
+    }
+}
+
+@Composable
+fun ImageCard(
+    modifier: Modifier = Modifier,
+    size: Dp = 150.dp,
+    backgroundColor: Color = MaterialTheme.colors.background,
+    elevation: Dp = 4.dp,
+    shape: Shape = CircleShape,
+    imageUrl: String,
+) {
+    Card(
+        modifier = modifier
+            .size(size)
+            .padding(6.dp),
+        shape = shape,
+        elevation = elevation,
+        backgroundColor = backgroundColor
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = "book_image",
+            contentScale = ContentScale.Crop
+        )
     }
 }
