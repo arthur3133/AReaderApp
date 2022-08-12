@@ -19,4 +19,18 @@ class FirestoreRepository @Inject constructor(private val queryBook: Query) {
             Resource.Error(message = e.localizedMessage ?: "An unexpected error occurred")
         }
     }
+
+    suspend fun getBook(googleBookId: String): Resource<MBook> {
+        return try {
+            Resource.Loading(data = true)
+            val book = queryBook.get().await().documents.map { documentSnapshot ->
+                documentSnapshot.toObject(MBook::class.java)!!
+            }.filter {
+                it.googleBookId == googleBookId
+            }
+            Resource.Success(data = book.first())
+        } catch (e: Exception) {
+            Resource.Error(message = e.localizedMessage ?: "An unexpected error occurred")
+        }
+    }
 }

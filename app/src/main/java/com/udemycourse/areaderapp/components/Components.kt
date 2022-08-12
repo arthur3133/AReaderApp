@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -130,7 +129,7 @@ fun AppBar(
             )
         },
         elevation = AppBarDefaults.TopAppBarElevation,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = Color.Transparent,
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(

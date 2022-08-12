@@ -1,6 +1,8 @@
 package com.udemycourse.areaderapp.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,6 +32,7 @@ import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.udemycourse.areaderapp.components.RoundButton
 import com.udemycourse.areaderapp.model.MBook
+import com.udemycourse.areaderapp.navigation.AReaderScreen
 
 @Composable
 fun HomeContent(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel()) {
@@ -81,7 +84,9 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel = hil
         if (state.loading) {
             CircularProgressIndicator(modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
         } else {
-            val bookList = state.bookList
+            val bookList = state.bookList.filter {
+                it.userId == FirebaseAuth.getInstance().currentUser?.uid.toString()
+            }
             ReadingListArea(books = bookList, navController = navController)
         }
     }
@@ -123,7 +128,9 @@ fun BookCard(book: MBook, navController: NavController) {
             .width(200.dp)
             .height(250.dp)
             .padding(10.dp),
-        onClick = { },
+        onClick = {
+            navController.navigate(AReaderScreen.BookUpdateScreen.name + "/${book.googleBookId}")
+        },
         shape = RoundedCornerShape(29.dp),
         elevation = 6.dp
     ) {

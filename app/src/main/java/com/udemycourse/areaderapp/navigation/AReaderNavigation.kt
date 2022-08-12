@@ -1,7 +1,7 @@
 package com.udemycourse.areaderapp.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +11,7 @@ import com.udemycourse.areaderapp.screens.book_info.BookInfoScreen
 import com.udemycourse.areaderapp.screens.home.HomeScreen
 import com.udemycourse.areaderapp.screens.loginsignup.LoginSignupScreen
 import com.udemycourse.areaderapp.screens.book_search.SearchScreen
+import com.udemycourse.areaderapp.screens.book_update.BookUpdateScreen
 import com.udemycourse.areaderapp.screens.splash.SplashScreen
 
 @Composable
@@ -48,6 +49,15 @@ fun AReaderNavigation() {
         ) { navBackStackEntry ->
             val bookId = navBackStackEntry.arguments?.getString("bookId")
             BookInfoScreen(navController = navController, bookId = bookId)
+        }
+        composable(
+            route = AReaderScreen.BookUpdateScreen.name+"/{googleBookId}",
+            arguments = listOf(navArgument("googleBookId"){
+                type = NavType.StringType
+            })
+        ) { navBackStackEntry ->
+            val googleBookId = navBackStackEntry.arguments?.getString("googleBookId")
+            BookUpdateScreen(navController = navController, googleBookId = googleBookId)
         }
     }
 }
