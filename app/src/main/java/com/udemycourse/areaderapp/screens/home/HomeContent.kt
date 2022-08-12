@@ -12,6 +12,9 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -20,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -28,7 +32,10 @@ import com.udemycourse.areaderapp.components.RoundButton
 import com.udemycourse.areaderapp.model.MBook
 
 @Composable
-fun HomeContent(navController: NavController) {
+fun HomeContent(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel()) {
+    LaunchedEffect(key1 = true) {
+        homeViewModel.getAllBooks()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,15 +77,13 @@ fun HomeContent(navController: NavController) {
         ReadingRightNowArea(navController = navController)
         Spacer(modifier = Modifier.height(10.dp))
         SectionName(title = "Reading List")
-        ReadingListArea(books = listOf<MBook>(
-            MBook(id = "1234", title = "Android", authors = "Me and you", notes = ""),
-            MBook(id = "1234", title = "Kotling", authors = "Me you", notes = ""),
-            MBook(id = "1234", title = "Androivkdjvd", authors = "and you", notes = ""),
-            MBook(id = "1234", title = "Axvnclkndroid", authors = "Me and", notes = ""),
-            MBook(id = "1234", title = "A3743947ndroid", authors = "you", notes = ""),
-            MBook(id = "1234", title = "Agkkd;ndroid", authors = "Me", notes = ""),
-            MBook(id = "1234", title = "An09r80droid", authors = "Me you", notes = ""),
-        ), navController = navController)
+        val state by homeViewModel.state.collectAsState()
+        if (state.loading) {
+            CircularProgressIndicator(modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
+        } else {
+            val bookList = state.bookList
+            ReadingListArea(books = bookList, navController = navController)
+        }
     }
 }
 
@@ -93,8 +98,8 @@ fun SectionName(title: String) {
 }
 
 @Composable
-fun ReadingRightNowArea(book: List<MBook> = emptyList(), navController: NavController) {
-    BookCard(navController = navController)
+fun ReadingRightNowArea(books: List<MBook> = emptyList(), navController: NavController) {
+    BookCard(book = MBook(title = "Android", authors = ";fkjdsfkdsfkd", notes = "vd;kds;fkdsl", photoUrl = "http://books.google.com/books/content?id=aYpoDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"), navController = navController)
 }
 
 @Composable
@@ -112,13 +117,13 @@ fun ReadingListArea(books: List<MBook>, navController: NavController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BookCard(book: MBook = MBook(id = "1234", title = "Android", authors = "asdf", notes = "asdfgasdfg"), navController: NavController) {
+fun BookCard(book: MBook, navController: NavController) {
     Card(
         modifier = Modifier
             .width(200.dp)
             .height(250.dp)
             .padding(10.dp),
-        onClick = { /*TODO*/ },
+        onClick = { },
         shape = RoundedCornerShape(29.dp),
         elevation = 6.dp
     ) {
@@ -130,9 +135,10 @@ fun BookCard(book: MBook = MBook(id = "1234", title = "Android", authors = "asdf
                modifier = Modifier.fillMaxWidth(),
                horizontalArrangement = Arrangement.SpaceBetween
            ){
+               val imageUrl = book.photoUrl?.trim()
                AsyncImage(
                    model = ImageRequest.Builder(LocalContext.current)
-                       .data("http://books.google.com/books/content?id=JGH0DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api")
+                       .data(imageUrl)
                        .crossfade(true)
                        .build(),
                    contentDescription = "book_image",

@@ -1,7 +1,10 @@
 package com.udemycourse.areaderapp.di
 
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.udemycourse.areaderapp.remote.BooksApi
 import com.udemycourse.areaderapp.repository.BookRepository
+import com.udemycourse.areaderapp.repository.FirestoreRepository
 import com.udemycourse.areaderapp.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -28,4 +31,8 @@ object AppModule {
     @Singleton
     @Provides
     fun provideBookSearchRepository(booksApi: BooksApi) = BookRepository(booksApi)
+
+    @Singleton
+    @Provides
+    fun provideFirestoreBooksCollection() = FirestoreRepository(queryBook = FirebaseFirestore.getInstance().collection("books"))
 }
