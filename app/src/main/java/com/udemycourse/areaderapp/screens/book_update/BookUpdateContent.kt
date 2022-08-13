@@ -38,13 +38,11 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.udemycourse.areaderapp.R
 import com.udemycourse.areaderapp.components.RoundButton
 import com.udemycourse.areaderapp.model.MBook
 import com.udemycourse.areaderapp.navigation.AReaderScreen
-import com.udemycourse.areaderapp.screens.book_info.saveBookInfoToFirestore
 import com.udemycourse.areaderapp.utils.Constants
 
 @Composable
@@ -81,11 +79,11 @@ fun BookUpdateContent(
             .background(MaterialTheme.colors.background)
             .padding(10.dp),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = CenterHorizontally
     ) {
         val state by bookUpdateViewModel.state.collectAsState()
         if (state.loading) {
-            CircularProgressIndicator(modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
+            CircularProgressIndicator(modifier = Modifier.align(alignment = CenterHorizontally))
         } else {
             val book = state.book
             Card(
@@ -246,8 +244,8 @@ fun BookUpdateContent(
                         book?.id?.let {
                             FirebaseFirestore.getInstance().collection("books")
                                 .document(it).delete()
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
+                                .addOnCompleteListener { tasks ->
+                                    if (tasks.isSuccessful) {
                                         openDialog.value = false
                                         navController.navigate(AReaderScreen.HomeScreen.name)
                                     }
@@ -265,7 +263,7 @@ fun NotesTextField(
     book: MBook,
     onDone: (String) -> Unit
 ) {
-    val notes = book?.notes.toString().ifEmpty { "Not thoughts available." }
+    val notes = book.notes.toString().ifEmpty { "Not thoughts available." }
 
     val valueState = rememberSaveable {
         mutableStateOf(notes)

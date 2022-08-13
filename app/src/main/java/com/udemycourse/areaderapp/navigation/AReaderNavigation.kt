@@ -1,6 +1,5 @@
 package com.udemycourse.areaderapp.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost

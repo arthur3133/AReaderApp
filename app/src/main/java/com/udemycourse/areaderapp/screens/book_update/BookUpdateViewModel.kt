@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udemycourse.areaderapp.data.Resource
 import com.udemycourse.areaderapp.repository.FirestoreRepository
-import com.udemycourse.areaderapp.screens.home.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

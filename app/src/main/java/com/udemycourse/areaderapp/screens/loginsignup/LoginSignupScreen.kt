@@ -166,14 +166,6 @@ fun SubmitButton(text: String, validInputs: Boolean, onClick: () -> Unit) {
         shape = CircleShape,
         enabled = validInputs
     ) {
-//        if (validInputs) {
-//            CircularProgressIndicator(modifier = Modifier.size(25.dp))
-//        } else {
-//            Text(
-//                text = text,
-//                modifier = Modifier.padding(5.dp)
-//            )
-//        }
         Text(
             text = text,
             modifier = Modifier.padding(5.dp)

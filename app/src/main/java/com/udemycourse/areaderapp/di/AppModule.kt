@@ -1,7 +1,6 @@
 package com.udemycourse.areaderapp.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.udemycourse.areaderapp.remote.BooksApi
 import com.udemycourse.areaderapp.repository.BookRepository
 import com.udemycourse.areaderapp.repository.FirestoreRepository

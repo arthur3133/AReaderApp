@@ -128,7 +128,7 @@ fun AppBar(
                 color = titleColor.copy(0.7f)
             )
         },
-        elevation = AppBarDefaults.TopAppBarElevation,
+        elevation = 0.dp,
         backgroundColor = Color.Transparent,
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
