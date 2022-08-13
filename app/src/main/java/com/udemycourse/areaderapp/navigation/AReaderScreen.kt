@@ -6,5 +6,6 @@ enum class AReaderScreen {
     HomeScreen,
     BookSearchScreen,
     BookInfoScreen,
-    BookUpdateScreen
+    BookUpdateScreen,
+    BookStatsScreen
 }

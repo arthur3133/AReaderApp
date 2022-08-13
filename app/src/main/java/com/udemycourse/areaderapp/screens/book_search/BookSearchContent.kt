@@ -111,26 +111,22 @@ fun BookRow(
                     text = book.volumeInfo.title,
                     style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.onBackground,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = "Authors: ${book.volumeInfo.authors}",
                     style = MaterialTheme.typography.caption,
-                    fontStyle = FontStyle.Italic,
-                    color = MaterialTheme.colors.onBackground
+                    fontStyle = FontStyle.Italic
                 )
                 Text(
                     text = "Date: ${book.volumeInfo.publishedDate}",
                     style = MaterialTheme.typography.caption,
-                    fontStyle = FontStyle.Italic,
-                    color = MaterialTheme.colors.onBackground
+                    fontStyle = FontStyle.Italic
                 )
                 Text(
                     text = "${book.volumeInfo.categories}",
                     style = MaterialTheme.typography.caption,
-                    fontStyle = FontStyle.Italic,
-                    color = MaterialTheme.colors.onBackground
+                    fontStyle = FontStyle.Italic
                 )
             }
         }

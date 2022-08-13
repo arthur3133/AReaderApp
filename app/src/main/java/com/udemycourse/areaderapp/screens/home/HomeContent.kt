@@ -13,12 +13,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -48,38 +46,6 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel = hil
         verticalArrangement = Arrangement.Top
     ) {
         val displayName = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            SectionName(title = "Your reading \n activity right now...")
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-               IconButton(onClick = { /*TODO*/ }) {
-                   Icon(
-                       imageVector = Icons.Default.AccountCircle,
-                       contentDescription = "account_icon",
-                       tint = MaterialTheme.colors.onBackground,
-                       modifier = Modifier.size(50.dp)
-                   )
-               }
-                Text(
-                    text = displayName.toString(),
-                    style = MaterialTheme.typography.overline,
-                    maxLines = 1,
-                    overflow = TextOverflow.Clip,
-                    fontSize = 15.sp
-                )
-
-            }
-        }
-        ReadingRightNowArea(navController = navController)
-        Spacer(modifier = Modifier.height(10.dp))
-        SectionName(title = "Reading List")
         val state by homeViewModel.state.collectAsState()
         if (state.loading) {
             CircularProgressIndicator(modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
@@ -87,6 +53,40 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel = hil
             val bookList = state.bookList.filter {
                 it.userId == FirebaseAuth.getInstance().currentUser?.uid.toString()
             }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                SectionName(title = "Your reading \n activity right now...")
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(onClick = {
+                        navController.navigate(AReaderScreen.BookStatsScreen.name)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = "account_icon",
+                            tint = MaterialTheme.colors.onBackground,
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
+                    Text(
+                        text = displayName.toString(),
+                        style = MaterialTheme.typography.overline,
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
+                        fontSize = 15.sp
+                    )
+
+                }
+            }
+            ReadingRightNowArea(books = bookList, navController = navController)
+            Spacer(modifier = Modifier.height(10.dp))
+            SectionName(title = "Reading List")
             ReadingListArea(books = bookList, navController = navController)
         }
     }
@@ -103,21 +103,46 @@ fun SectionName(title: String) {
 }
 
 @Composable
-fun ReadingRightNowArea(books: List<MBook> = emptyList(), navController: NavController) {
-    BookCard(book = MBook(title = "Android", authors = ";fkjdsfkdsfkd", notes = "vd;kds;fkdsl", photoUrl = "http://books.google.com/books/content?id=aYpoDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"), navController = navController)
+fun ReadingRightNowArea(books: List<MBook>, navController: NavController) {
+    val startedReadingBookList = books.filter {
+        it.startedReading != null && it.finishedReading == null
+    }
+    if (startedReadingBookList.isEmpty()) {
+        Text(
+            text = "Book reading not started yet...",
+            color = Color.Red.copy(0.5f)
+        )
+    }
+        LazyRow(
+            modifier = Modifier
+                .padding(10.dp)
+        ) {
+            items(startedReadingBookList) { book ->
+                BookCard(book = book, navController = navController)
+            }
+        }
 }
 
 @Composable
 fun ReadingListArea(books: List<MBook>, navController: NavController) {
-    LazyRow(
-        modifier = Modifier
-            .padding(10.dp)
-    ) {
-        items(books) { book ->
-            BookCard(book = book, navController = navController)
+    val readingBookList = books.filter {
+        it.startedReading == null && it.finishedReading == null
+    }
+    if (readingBookList.isEmpty()) {
+        Text(
+            text = "Not books found. Add a book.",
+            color = Color.Red.copy(0.5f)
+        )
+    } else {
+        LazyRow(
+            modifier = Modifier
+                .padding(10.dp)
+        ) {
+            items(readingBookList) { book ->
+                BookCard(book = book, navController = navController)
+            }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -164,7 +189,7 @@ fun BookCard(book: MBook, navController: NavController) {
                        contentDescription = "favorite_icon",
                        modifier = Modifier.padding(bottom = 1.dp)
                    )
-                   BookRating(3.5)
+                   book.rating?.let { BookRating(it) }
                }
            }
             Text(
@@ -180,11 +205,15 @@ fun BookCard(book: MBook, navController: NavController) {
                 text = book.authors.toString(),
                 style = MaterialTheme.typography.caption
             )
+            var isReadingStarted = remember {
+                mutableStateOf(false)
+            }
             Row(modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.End
             ) {
-                RoundButton(label = "Reading", radius = 70, onClick = {})
+                isReadingStarted.value = book.startedReading != null
+                RoundButton(label = if (isReadingStarted.value) "Reading" else "Not Started", radius = 70, onClick = {})
             }
         }
     }

@@ -11,6 +11,7 @@ import com.udemycourse.areaderapp.screens.book_info.BookInfoScreen
 import com.udemycourse.areaderapp.screens.home.HomeScreen
 import com.udemycourse.areaderapp.screens.loginsignup.LoginSignupScreen
 import com.udemycourse.areaderapp.screens.book_search.SearchScreen
+import com.udemycourse.areaderapp.screens.book_stats.BookStatsScreen
 import com.udemycourse.areaderapp.screens.book_update.BookUpdateScreen
 import com.udemycourse.areaderapp.screens.splash.SplashScreen
 
@@ -58,6 +59,11 @@ fun AReaderNavigation() {
         ) { navBackStackEntry ->
             val googleBookId = navBackStackEntry.arguments?.getString("googleBookId")
             BookUpdateScreen(navController = navController, googleBookId = googleBookId)
+        }
+        composable(
+            route = AReaderScreen.BookStatsScreen.name
+        ) {
+            BookStatsScreen(navController = navController)
         }
     }
 }
